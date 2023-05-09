@@ -53,15 +53,87 @@ static_assert(0, "libfreetype path not specified");
 #if defined(DYNAMIC)
 
 FT_EXPORT(FT_Error)
-(*SO_FT_Init_FreeType)(FT_Library*);
+(*SO_FT_Init_FreeType)(
+  FT_Library*
+);
+
 FT_EXPORT(FT_Error)
-(*SO_FT_New_Face)(FT_Library, const char*, FT_Long, FT_Long);
+(*SO_FT_New_Face)(
+    FT_Library,
+    const char*,
+    FT_Long,
+    FT_Long
+);
+
 FT_EXPORT(FT_Error)
-(*SO_FT_Set_Pixel_Sizes)(FT_Face, FT_UInt, FT_UInt);
+(*SO_FT_Done_FreeType)(
+  FT_Library
+);
+
+FT_EXPORT(FT_Error)
+(*SO_FT_Set_Pixel_Sizes)(
+  FT_Face,
+  FT_UInt,
+  FT_UInt
+);
+
+FT_EXPORT(FT_Error)
+(*SO_FT_Done_Face)(
+  FT_Face
+);
+
+FT_EXPORT(FT_Error)
+(*SO_FT_Load_Char)(
+  FT_Face,
+  FT_ULong,
+  FT_Int32
+);
+
+FT_EXPORT(FT_Error)
+(*SO_FT_Get_Glyph)(
+  FT_GlyphSlot,
+  FT_Glyph
+);
+
+FT_EXPORT(FT_Error)
+(*SO_FT_Glyph_To_Bitmap)(
+  FT_Glyph*,
+  FT_Render_Mode,
+  const FT_Vector*,
+  FT_Bool
+);
+
+FT_EXPORT(FT_Error)
+(*SO_FT_Done_Glyph)(
+  FT_Glyph
+);
+
+FT_EXPORT(FT_Error)
+(*SO_FT_Get_Char_Index)(
+  FT_Face,
+  FT_ULong
+);
+
+FT_EXPORT(FT_Error)
+(*SO_FT_Get_Kerning)(
+  FT_Face,
+  FT_UInt,
+  FT_UInt,
+  FT_UInt,
+  FT_Vector*
+);
 
 #define FT_Init_FreeType SO_FT_Init_FreeType
 #define FT_New_Face SO_FT_New_Face
+#define FT_Done_FreeType SO_FT_Done_FreeType
+#define FT_Done_Face SO_FT_Done_Face
 #define FT_Set_Pixel_Sizes SO_FT_Set_Pixel_Sizes
+#define FT_Load_Char SO_FT_Load_Char
+#define FT_Get_Glyph SO_FT_Get_Glyph
+#define FT_Glyph_To_Bitmap SO_FT_Glyph_To_Bitmap
+#define FT_Done_Glyph SO_FT_Done_Glyph
+#define FT_Get_Char_Index SO_FT_Get_Char_Index
+#define FT_Get_Kerning SO_FT_Get_Kerning
 
 #endif // DYNAMIC
 

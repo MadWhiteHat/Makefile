@@ -88,67 +88,67 @@ func_resolve(void) {
     return 1;
   }
 
-  FT_Init_FreeType = dlsym(__libfreetype, "FT_Init_FreeType");
+  SO_FT_Init_FreeType = dlsym(__libfreetype, "FT_Init_FreeType");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  FT_New_Face = dlsym(__libfreetype, "FT_New_Face");
+  SO_FT_New_Face = dlsym(__libfreetype, "FT_New_Face");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  FT_Set_Pixel_Sizes = dlsym(__libfreetype, "FT_Set_Pixel_Sizes");
+  SO_FT_Done_FreeType = dlsym(__libfreetype, "FT_Done_FreeType");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  FT_Load_Char = dlsym(__libfreetype, "FT_Load_Char");
+  SO_FT_Set_Pixel_Sizes = dlsym(__libfreetype, "FT_Set_Pixel_Sizes");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  FT_Get_Char_Index = dlsym(__libfreetype, "FT_Get_Char_Index");
+  SO_FT_Load_Char = dlsym(__libfreetype, "FT_Load_Char");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  FT_Get_Glyph = dlsym(__libfreetype, "FT_Get_Glyph");
+  SO_FT_Get_Char_Index = dlsym(__libfreetype, "FT_Get_Char_Index");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  FT_Done_Glyph = dlsym(__libfreetype, "FT_Done_Glyph");
+  SO_FT_Get_Glyph = dlsym(__libfreetype, "FT_Get_Glyph");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  FT_Done_Face = dlsym(__libfreetype, "FT_Done_Face");
+  SO_FT_Done_Glyph = dlsym(__libfreetype, "FT_Done_Glyph");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  FT_Done_FreeType = dlsym(__libfreetype, "FT_Done_FreeType");
+  SO_FT_Done_Face = dlsym(__libfreetype, "FT_Done_Face");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  FT_Get_Kerning = dlsym(__libfreetype, "FT_Get_Kerning");
+  SO_FT_Get_Kerning = dlsym(__libfreetype, "FT_Get_Kerning");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  FT_Glyph_To_Bitmap = dlsym(__libfreetype, "FT_Glyph_To_Bitmap");
+  SO_FT_Glyph_To_Bitmap = dlsym(__libfreetype, "FT_Glyph_To_Bitmap");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;

@@ -5,7 +5,7 @@ ROOT_MAKEFILE_DIR = ${abspath ./}
 PROJECT_NAME=text2png
 PROJECT_SOURCE_DIR=${ROOT_MAKEFILE_DIR}/src
 PROJECT_OUT_DIR=${ROOT_MAKEFILE_DIR}/out
-PROJECT_EXTERNAL_DIR=${ROOT_MAKEFILE_DIR}/extenal
+PROJECT_EXTERNAL_DIR=${ROOT_MAKEFILE_DIR}/external
 PROJECT_HEADERS=${PROJECT_SOURCE_DIR}/utility.h
 PROJECT_SOURCES=${PROJECT_SOURCE_DIR}/main.c ${PROJECT_SOURCE_DIR}/utility.c
 PROJECT_BUILD_DIR=${PROJECT_OUT_DIR}/build
@@ -72,7 +72,7 @@ FREETYPE_SHARED_LIBRARY=${FREETYPE_BINARY_DIR}/libfreetype.so
 
 --git_update:
 	@echo "Updating libraries..."
-	@git submodule update --init --recursive
+	@git submodule update --init --recursive --remote
 	@echo "Done!"
 
 
