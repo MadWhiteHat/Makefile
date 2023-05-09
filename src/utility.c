@@ -20,60 +20,60 @@ func_resolve(void) {
 
   __libpng = dlopen(LIBPNG_PATH, RTLD_LAZY);
 
-  if (__libfreetype == NULL) {
+  if (__libpng == NULL) {
     printf("%s\n", dlerror());
     return 1;
   }
 
-  png_create_write_struct = dlsym(__libfreetype, "png_create_write_struct");
+  png_create_write_struct = dlsym(__libpng, "png_create_write_struct");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  png_create_info_struct = dlsym(__libfreetype, "png_create_info_struct");
+  png_create_info_struct = dlsym(__libpng, "png_create_info_struct");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  png_init_io = dlsym(__libfreetype, "png_init_io");
+  png_init_io = dlsym(__libpng, "png_init_io");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  png_set_IHDR = dlsym(__libfreetype, "png_set_IHDR");
+  png_set_IHDR = dlsym(__libpng, "png_set_IHDR");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  png_set_text = dlsym(__libfreetype, "png_set_text");
+  png_set_text = dlsym(__libpng, "png_set_text");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  png_write_row = dlsym(__libfreetype, "png_write_row");
+  png_write_row = dlsym(__libpng, "png_write_row");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  png_write_end = dlsym(__libfreetype, "png_write_end");
+  png_write_end = dlsym(__libpng, "png_write_end");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  png_destroy_write_struct = dlsym(__libfreetype, "png_destroy_write_struct");
+  png_destroy_write_struct = dlsym(__libpng, "png_destroy_write_struct");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  png_write_info = dlsym(__libfreetype, "png_write_info");
+  png_write_info = dlsym(__libpng, "png_write_info");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
@@ -112,13 +112,13 @@ func_resolve(void) {
     return 1;
   }
 
-  SO_FT_Load_Char = dlsym(__libfreetype, "FT_Load_Char");
+  SO_FT_Done_Face = dlsym(__libfreetype, "FT_Done_Face");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  SO_FT_Get_Char_Index = dlsym(__libfreetype, "FT_Get_Char_Index");
+  SO_FT_Load_Char = dlsym(__libfreetype, "FT_Load_Char");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
@@ -130,25 +130,25 @@ func_resolve(void) {
     return 1;
   }
 
+  SO_FT_Glyph_To_Bitmap = dlsym(__libfreetype, "FT_Glyph_To_Bitmap");
+  if ((__err = dlerror()) == NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
   SO_FT_Done_Glyph = dlsym(__libfreetype, "FT_Done_Glyph");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  SO_FT_Done_Face = dlsym(__libfreetype, "FT_Done_Face");
+  SO_FT_Get_Char_Index = dlsym(__libfreetype, "FT_Get_Char_Index");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
   SO_FT_Get_Kerning = dlsym(__libfreetype, "FT_Get_Kerning");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_FT_Glyph_To_Bitmap = dlsym(__libfreetype, "FT_Glyph_To_Bitmap");
   if ((__err = dlerror()) == NULL) {
     printf("%s\n", __err);
     return 1;

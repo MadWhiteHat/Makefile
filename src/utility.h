@@ -62,7 +62,7 @@ FT_EXPORT(FT_Error)
     FT_Library,
     const char*,
     FT_Long,
-    FT_Long
+    FT_Face*
 );
 
 FT_EXPORT(FT_Error)
@@ -134,6 +134,80 @@ FT_EXPORT(FT_Error)
 #define FT_Done_Glyph SO_FT_Done_Glyph
 #define FT_Get_Char_Index SO_FT_Get_Char_Index
 #define FT_Get_Kerning SO_FT_Get_Kerning
+
+png_structp
+(*SO_png_create_write_struct)(
+  png_const_charp,
+  png_voidp,
+  png_error_ptr,
+  png_error_ptr
+);
+
+png_infop
+(*SO_png_create_info_struct)(
+  png_structp
+);
+
+void
+(*SO_png_destroy_write_struct)(
+  png_structpp,
+  png_infopp
+);
+
+void
+(*SO_png_init_io)(
+  png_structp,
+  png_FILE_p
+);
+
+void
+(*SO_png_set_IHDR)(
+  png_structp,
+  png_infop,
+  png_unit_32,
+  png_unit_32,
+  int,
+  int,
+  int,
+  int,
+  int
+);
+
+void
+(*SO_png_set_text)(
+  png_structp,
+  png_infop,
+  png_textp,
+  int
+);
+
+void
+(*SO_png_write_info)(
+  png_structp,
+  png_infop
+);
+
+void
+(*SO_png_write_row)(
+  png_structp,
+  png_bytep
+);
+
+void
+(*SO_png_write_end)(
+  png_structp,
+  png_infop
+);
+
+#define png_create_write_struct SO_png_create_write_struct
+#define png_create_info_struct SO_png_create_info_struct
+#define png_destroy_write_struct SO_png_destroy_write_struct
+#define png_init_io SO_png_init_io
+#define png_set_IHDR SO_png_set_IHDR
+#define png_set_text SO_png_set_text
+#define png_write_info SO_png_write_info
+#define png_write_row SO_png_write_row
+#define png_write_end SO_png_write_end
 
 #endif // DYNAMIC
 
