@@ -11,9 +11,9 @@
 static_assert(0, "Multiple mutial exclusive definitions");
 #endif // DYNAMIC || BLOB
 #elif defined(DYNAMIC)
-#if defined(STATIC) || defined(DYNAMIC)
+#if defined(STATIC) || defined(BLOB)
 static_assert(0, "Multiple mutial exclusive definitions");
-#endif // STATIC || DYNAMIC
+#endif // STATIC || BLOB
 #elif defined(BLOB)
 #if defined(STATIC) || defined(DYNAMIC)
 static_assert(0, "Multiple mutial exclusive definitions");
@@ -52,12 +52,12 @@ static_assert(0, "libfreetype path not specified");
 
 #if defined(DYNAMIC)
 
-FT_EXPORT(FT_Error)
+FT_Error
 (*SO_FT_Init_FreeType)(
   FT_Library*
 );
 
-FT_EXPORT(FT_Error)
+FT_Error
 (*SO_FT_New_Face)(
     FT_Library,
     const char*,
@@ -65,37 +65,37 @@ FT_EXPORT(FT_Error)
     FT_Face*
 );
 
-FT_EXPORT(FT_Error)
+FT_Error
 (*SO_FT_Done_FreeType)(
   FT_Library
 );
 
-FT_EXPORT(FT_Error)
+FT_Error
 (*SO_FT_Set_Pixel_Sizes)(
   FT_Face,
   FT_UInt,
   FT_UInt
 );
 
-FT_EXPORT(FT_Error)
+FT_Error
 (*SO_FT_Done_Face)(
   FT_Face
 );
 
-FT_EXPORT(FT_Error)
+FT_Error
 (*SO_FT_Load_Char)(
   FT_Face,
   FT_ULong,
   FT_Int32
 );
 
-FT_EXPORT(FT_Error)
+FT_Error
 (*SO_FT_Get_Glyph)(
   FT_GlyphSlot,
-  FT_Glyph
+  FT_Glyph*
 );
 
-FT_EXPORT(FT_Error)
+FT_Error
 (*SO_FT_Glyph_To_Bitmap)(
   FT_Glyph*,
   FT_Render_Mode,
@@ -103,18 +103,18 @@ FT_EXPORT(FT_Error)
   FT_Bool
 );
 
-FT_EXPORT(FT_Error)
+FT_Error
 (*SO_FT_Done_Glyph)(
   FT_Glyph
 );
 
-FT_EXPORT(FT_Error)
+FT_Error
 (*SO_FT_Get_Char_Index)(
   FT_Face,
   FT_ULong
 );
 
-FT_EXPORT(FT_Error)
+FT_Error
 (*SO_FT_Get_Kerning)(
   FT_Face,
   FT_UInt,
@@ -164,8 +164,8 @@ void
 (*SO_png_set_IHDR)(
   png_structp,
   png_infop,
-  png_unit_32,
-  png_unit_32,
+  png_uint_32,
+  png_uint_32,
   int,
   int,
   int,

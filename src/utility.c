@@ -18,69 +18,6 @@ func_resolve(void) {
   void* __libfreetype = NULL;
   char* __err = NULL;
 
-  __libpng = dlopen(LIBPNG_PATH, RTLD_LAZY);
-
-  if (__libpng == NULL) {
-    printf("%s\n", dlerror());
-    return 1;
-  }
-
-  png_create_write_struct = dlsym(__libpng, "png_create_write_struct");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  png_create_info_struct = dlsym(__libpng, "png_create_info_struct");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  png_init_io = dlsym(__libpng, "png_init_io");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  png_set_IHDR = dlsym(__libpng, "png_set_IHDR");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  png_set_text = dlsym(__libpng, "png_set_text");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  png_write_row = dlsym(__libpng, "png_write_row");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  png_write_end = dlsym(__libpng, "png_write_end");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  png_destroy_write_struct = dlsym(__libpng, "png_destroy_write_struct");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  png_write_info = dlsym(__libpng, "png_write_info");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  dlclose(__libpng);
-
   __libfreetype = dlopen(LIBFREETYPE_PATH, RTLD_LAZY);
 
   if (__libfreetype == NULL) {
@@ -155,6 +92,69 @@ func_resolve(void) {
   }
 
   dlclose(__libfreetype);
+
+  __libpng = dlopen(LIBPNG_PATH, RTLD_LAZY);
+
+  if (__libpng == NULL) {
+    printf("%s\n", dlerror());
+    return 1;
+  }
+
+  SO_png_create_write_struct = dlsym(__libpng, "png_create_write_struct");
+  if ((__err = dlerror()) == NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_create_info_struct = dlsym(__libpng, "png_create_info_struct");
+  if ((__err = dlerror()) == NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_init_io = dlsym(__libpng, "png_init_io");
+  if ((__err = dlerror()) == NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_set_IHDR = dlsym(__libpng, "png_set_IHDR");
+  if ((__err = dlerror()) == NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_set_text = dlsym(__libpng, "png_set_text");
+  if ((__err = dlerror()) == NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_write_row = dlsym(__libpng, "png_write_row");
+  if ((__err = dlerror()) == NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_write_end = dlsym(__libpng, "png_write_end");
+  if ((__err = dlerror()) == NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_destroy_write_struct = dlsym(__libpng, "png_destroy_write_struct");
+  if ((__err = dlerror()) == NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_write_info = dlsym(__libpng, "png_write_info");
+  if ((__err = dlerror()) == NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  dlclose(__libpng);
   return 0;
 }
 #endif
