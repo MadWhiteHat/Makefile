@@ -52,6 +52,8 @@ static_assert(0, "libfreetype path not specified");
 
 #if defined(DYNAMIC)
 
+void* _libfreetype = NULL;
+
 FT_Error
 (*SO_FT_Init_FreeType)(
   FT_Library*
@@ -59,10 +61,10 @@ FT_Error
 
 FT_Error
 (*SO_FT_New_Face)(
-    FT_Library,
-    const char*,
-    FT_Long,
-    FT_Face*
+  FT_Library,
+  const char*,
+  FT_Long,
+  FT_Face*
 );
 
 FT_Error
@@ -134,6 +136,8 @@ FT_Error
 #define FT_Done_Glyph SO_FT_Done_Glyph
 #define FT_Get_Char_Index SO_FT_Get_Char_Index
 #define FT_Get_Kerning SO_FT_Get_Kerning
+
+void* _libpng = NULL;
 
 png_structp
 (*SO_png_create_write_struct)(
@@ -219,13 +223,6 @@ typedef struct _my_symbol {
   FT_Glyph _glyph;
 } my_symbol;
 
-#if defined(DYNAMIC)
-int
-func_resolve(
-  void
-);
-#endif
-
 FT_Glyph
 get_glyph(
   FT_Face __ft__face,
@@ -239,27 +236,10 @@ get_kerning(
   unsigned int __right_charcode
 );
 
-float*
-text_to_float(
-  int* __width,
-  int* __height,
-  const char* __font,
-  const char* __text
-);
-
 void
 set_rgb(
   png_bytep __image_row,
   float __val
-);
-
-void
-create_image(
-  const char* __image_name,
-  int __width,
-  int __height,
-  float* __image_buff,
-  const char* __image_title
 );
 
 #endif // !_UTILITY_H

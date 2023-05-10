@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include <string.h>
 #include <time.h>
 
-#include "utility.h"
+#include "interface.h"
 
 #define DEFAULT_FONT "./fonts/AmaticSC-Regular.ttf"
 #define DEFAULT_TEXT "Hello world!"
@@ -28,7 +29,16 @@ int main(const int argc, const char** argv) {
   }
 
 #if defined(DYNAMIC)
-  func_resolve();
+  if (open_libs()) {
+    printf("Failed to open libs\n");
+    close_libs();
+    return 0;
+  }
+  if (func_resolve()) {
+    printf("Failed to resolve functions\n");
+    close_libs();
+    return 0;
+  }
 #endif // DYNAMIC
 
   for (int i = 1; i < argc; ++i) {
@@ -81,6 +91,10 @@ int main(const int argc, const char** argv) {
   }
 
   create_image(__image_name, __width, __height, __buff, "Created image");
+
+#ifdef DYNAMIC
+  close_libs();
+#endif // DYNAMIC
 
   clock_t __finish = clock();
   double __runtime = ((double)__finish - __start) / CLOCKS_PER_SEC;

@@ -9,158 +9,177 @@
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
 
+#include "interface.h"
 #include "utility.h"
 
 #if defined(DYNAMIC)
 int
-func_resolve(void) {
-  void* __libpng = NULL;
-  void* __libfreetype = NULL;
+open_libs(
+  void
+) {
+
   char* __err = NULL;
 
-  __libfreetype = dlopen(LIBFREETYPE_PATH, RTLD_LAZY);
+  _libfreetype = dlopen(LIBFREETYPE_PATH, RTLD_LAZY);
 
-  if (__libfreetype == NULL) {
-    printf("%s\n", dlerror());
-    return 1;
-  }
-
-  SO_FT_Init_FreeType = dlsym(__libfreetype, "FT_Init_FreeType");
-  if ((__err = dlerror()) == NULL) {
+  if ((__err = dlerror()) != NULL) {
     printf("%s\n", __err);
     return 1;
   }
 
-  SO_FT_New_Face = dlsym(__libfreetype, "FT_New_Face");
-  if ((__err = dlerror()) == NULL) {
+  _libpng = dlopen(LIBPNG_PATH, RTLD_LAZY);
+
+  if ((__err = dlerror()) != NULL) {
     printf("%s\n", __err);
     return 1;
   }
-
-  SO_FT_Done_FreeType = dlsym(__libfreetype, "FT_Done_FreeType");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_FT_Set_Pixel_Sizes = dlsym(__libfreetype, "FT_Set_Pixel_Sizes");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_FT_Done_Face = dlsym(__libfreetype, "FT_Done_Face");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_FT_Load_Char = dlsym(__libfreetype, "FT_Load_Char");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_FT_Get_Glyph = dlsym(__libfreetype, "FT_Get_Glyph");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_FT_Glyph_To_Bitmap = dlsym(__libfreetype, "FT_Glyph_To_Bitmap");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_FT_Done_Glyph = dlsym(__libfreetype, "FT_Done_Glyph");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_FT_Get_Char_Index = dlsym(__libfreetype, "FT_Get_Char_Index");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_FT_Get_Kerning = dlsym(__libfreetype, "FT_Get_Kerning");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  dlclose(__libfreetype);
-
-  __libpng = dlopen(LIBPNG_PATH, RTLD_LAZY);
-
-  if (__libpng == NULL) {
-    printf("%s\n", dlerror());
-    return 1;
-  }
-
-  SO_png_create_write_struct = dlsym(__libpng, "png_create_write_struct");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_png_create_info_struct = dlsym(__libpng, "png_create_info_struct");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_png_init_io = dlsym(__libpng, "png_init_io");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_png_set_IHDR = dlsym(__libpng, "png_set_IHDR");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_png_set_text = dlsym(__libpng, "png_set_text");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_png_write_row = dlsym(__libpng, "png_write_row");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_png_write_end = dlsym(__libpng, "png_write_end");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_png_destroy_write_struct = dlsym(__libpng, "png_destroy_write_struct");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  SO_png_write_info = dlsym(__libpng, "png_write_info");
-  if ((__err = dlerror()) == NULL) {
-    printf("%s\n", __err);
-    return 1;
-  }
-
-  dlclose(__libpng);
   return 0;
 }
-#endif
+
+int
+func_resolve(
+  void
+) {
+  char* __err = NULL;
+
+  SO_FT_Init_FreeType = dlsym(_libfreetype, "FT_Init_FreeType");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_FT_New_Face = dlsym(_libfreetype, "FT_New_Face");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_FT_Done_FreeType = dlsym(_libfreetype, "FT_Done_FreeType");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_FT_Set_Pixel_Sizes = dlsym(_libfreetype, "FT_Set_Pixel_Sizes");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_FT_Done_Face = dlsym(_libfreetype, "FT_Done_Face");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_FT_Load_Char = dlsym(_libfreetype, "FT_Load_Char");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_FT_Get_Glyph = dlsym(_libfreetype, "FT_Get_Glyph");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_FT_Glyph_To_Bitmap = dlsym(_libfreetype, "FT_Glyph_To_Bitmap");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_FT_Done_Glyph = dlsym(_libfreetype, "FT_Done_Glyph");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_FT_Get_Char_Index = dlsym(_libfreetype, "FT_Get_Char_Index");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_FT_Get_Kerning = dlsym(_libfreetype, "FT_Get_Kerning");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_create_write_struct = dlsym(_libpng, "png_create_write_struct");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_create_info_struct = dlsym(_libpng, "png_create_info_struct");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_init_io = dlsym(_libpng, "png_init_io");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_set_IHDR = dlsym(_libpng, "png_set_IHDR");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_set_text = dlsym(_libpng, "png_set_text");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_write_row = dlsym(_libpng, "png_write_row");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_write_end = dlsym(_libpng, "png_write_end");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_destroy_write_struct = dlsym(_libpng, "png_destroy_write_struct");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  SO_png_write_info = dlsym(_libpng, "png_write_info");
+  if ((__err = dlerror()) != NULL) {
+    printf("%s\n", __err);
+    return 1;
+  }
+
+  return 0;
+}
+
+void
+close_libs(
+  void
+) {
+  if (_libpng != NULL) { dlclose(_libpng); }
+  if (_libfreetype != NULL) { dlclose(_libfreetype); }
+}
+
+#endif // DYNAMIC
 
 FT_Glyph
-get_glyph(FT_Face __face, unsigned int __charcode) {
+get_glyph(
+  FT_Face __face,
+  unsigned int __charcode
+) {
   int __status = 0;
   FT_Glyph __glyph = NULL;
   __status = FT_Load_Char(__face, __charcode, FT_LOAD_RENDER);
@@ -188,8 +207,9 @@ FT_Pos
 get_kerning(
   FT_Face __face,
   unsigned int __left_charcode,
-  unsigned int __right_charcode) {
-  
+  unsigned int __right_charcode
+) {
+
   int __status = 0;
   FT_UInt __left_idx = FT_Get_Char_Index(__face, __left_charcode);
   FT_UInt __right_idx = FT_Get_Char_Index(__face, __right_charcode);
@@ -209,12 +229,14 @@ text_to_float(
   int* __width,
   int* __height,
   const char* __font,
-  const char* __text) {
+  const char* __text
+) {
 
   int __status = 0;
   FT_Library __lib = NULL;
   FT_Face __face = NULL;
   float* __img = NULL;
+
   FT_Init_FreeType(&__lib);
 
   if (__lib == NULL) {
@@ -328,6 +350,7 @@ text_to_float(
 
   return __img;
 }
+
 void
 set_rgb(
   png_bytep __image_row,
