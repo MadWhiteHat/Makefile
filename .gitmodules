@@ -4,9 +4,6 @@
 [submodule "external/freetype"]
 	path = external/freetype
 	url = https://github.com/freetype/freetype.git
-[submodule "external/elfloader"]
-	path = external/elfloader
-	url = https://github.com/xrw67/elfloader.git
 [submodule "external/zlib"]
 	path = external/zlib
 	url = https://github.com/madler/zlib.git
