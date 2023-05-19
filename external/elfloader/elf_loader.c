@@ -1,10 +1,15 @@
 #include "elf_loader.h"
+#include "elf_loader_extension.h"
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
 #include <limits.h>
 #include <dlfcn.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <math.h>
+#include <setjmp.h>
+#include <stdarg.h>
 #include <sys/user.h>
 #include <sys/mman.h>
 #include <sys/auxv.h>
@@ -1017,4 +1022,83 @@ int run_elf_module(struct elf_module *m, const char *func)
     fn = (void *)(m->load_bias + s->st_value);
 
     return fn();
+}
+
+int
+run_elf_module_by_entry_point(
+  struct elf_module* m,
+  const int argc,
+  const char** argv,
+  struct timespec* start
+) {
+  blob_entry_point_t fn;
+  fn = (blob_entry_point_t)(m->entry);
+
+  void* functions[100];
+  functions[BLOB_PUTS] = puts;
+  functions[BLOB_STRCMP] = strcmp;
+  functions[BLOB_STRLEN] = strcmp;
+  functions[BLOB_FOPEN] = fopen;
+  functions[BLOB_FCLOSE] = fclose;
+  functions[BLOB_TIMESPEC_GET] = timespec_get;
+  functions[BLOB_PRINT_DIFFTIME] = print_difftime;
+  functions[BLOB_MALLOC] = malloc;
+  functions[BLOB_MEMSET] = memset;
+  functions[BLOB_FREE] = free;
+  functions[BLOB_MEMMOVE] = memmove;
+  functions[BLOB_MEMCPY] = memcpy;
+  functions[BLOB_STRSTR] = strstr;
+  functions[BLOB_MEMCMP] = memcmp;
+  functions[BLOB_STRTOL] = strtol;
+  functions[BLOB_QSORT] = qsort;
+  functions[BLOB_STRNCPY] = strncpy;
+  functions[BLOB_STRRCHR] = strrchr;
+  functions[BLOB_STRCAT] = strcat;
+  functions[BLOB_GETENV] = getenv;
+  functions[BLOB_STRNCMP] = strncmp;
+  functions[BLOB_STRCPY] = strcpy;
+  functions[BLOB_MEMCHR] = memchr;
+  functions[BLOB_REALLOC] = realloc;
+  functions[BLOB_MUNMAP] = munmap;
+  functions[BLOB_OPEN] = open;
+  functions[BLOB_FSTAT] = fstat;
+  functions[BLOB_MMAP] = mmap;
+  functions[BLOB_READ] = read;
+  functions[BLOB___ERRNO_LOCATION] = __errno_location;
+  functions[BLOB_REMOVE] = remove;
+  functions[BLOB_FERROR] = ferror;
+  functions[BLOB_FPUTS] = fputs;
+  functions[BLOB_STRERROR] = strerror;
+  functions[BLOB_FREAD] = fread;
+  functions[BLOB_FLOOR] = floor;
+  functions[BLOB_GMTIME] = gmtime;
+  functions[BLOB_FREXP] = frexp;
+  functions[BLOB_MODF] = modf;
+  functions[BLOB_POW] = pow;
+  functions[BLOB_CLOSE] = close;
+  functions[BLOB_FPUTC] = fputc;
+  functions[BLOB_ABORT] = abort;
+  functions[BLOB_FFLUSH] = fflush;
+  functions[BLOB_ATOF] = atof;
+  functions[BLOB_FWRITE] = fwrite;
+  functions[BLOB__SETJMP] = _setjmp;
+  functions[BLOB_LONGJMP] = longjmp;
+  functions[BLOB_FCNTL] = fcntl;
+  functions[BLOB_PRINTF] = printf;
+  functions[BLOB_SPRINTF] = sprintf;
+  functions[BLOB_FPRINTF] = fprintf;
+
+  return fn(argc, argv, functions, start);
+}
+
+void
+print_difftime(
+  struct timespec* __start,
+  struct timespec* __finish
+) {
+  double __time_finish = __finish->tv_sec * 1000
+    + (double)__finish->tv_nsec / 1000000;
+  double __time_start = __start->tv_sec * 1000
+    + (double)__start->tv_nsec / 1000000;
+  printf("Time elapsed: %lf millisecond(s)\n", __time_finish - __time_start);
 }

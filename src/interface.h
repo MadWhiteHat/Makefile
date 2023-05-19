@@ -2,6 +2,15 @@
 #define _INTERFACE_H
 
 #include <stdio.h>
+#include <time.h>
+
+#if defined(BLOB)
+
+#include "elf_loader_extension.h"
+
+extern void** global_funcs;
+
+#endif // BLOB
 
 #if defined(DYNAMIC)
 int
@@ -29,13 +38,19 @@ text_to_float(
   const char* __text
 );
 
-void
+int
 create_image(
   const char* __image_name,
   int __width,
   int __height,
   float* __image_buff,
   const char* __image_title
+);
+
+void
+print_difftime(
+  struct timespec* __start,
+  struct timespec* __finish
 );
 
 #endif // _INTERFACE_H

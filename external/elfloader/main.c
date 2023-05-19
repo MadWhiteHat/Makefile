@@ -6,7 +6,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "elf_loader.h"
+#include "elf_loader_extension.h"
 #include "wheelc/wheelc.h"
+
 
 static bool read_file(const char *fname, void **buf, size_t *len)
 {
@@ -67,13 +69,17 @@ out_free:
 
 int main(int argc, char *argv[])
 {
+    struct timespec start;
+    struct timespec finish;
+    timespec_get(&start, TIME_UTC);
     struct elf_module *m;
     void *bin;
     size_t len;
     const char *fname;
     const char *bname;
 
-    if (argc != 3) {
+    // if (argc != 3) {
+    if (argc < 2) {
         LOG_ERR("need one param");
         return 0;
     }
@@ -86,6 +92,10 @@ int main(int argc, char *argv[])
         return 0;
     }
 
+    timespec_get(&finish, TIME_UTC);
+    printf("Elf loader finished execution");
+    print_difftime(&start, &finish);
+
     m = load_elf_module(bname, bin, len);
     if (m == NULL) {
         free(bin);
@@ -95,8 +105,12 @@ int main(int argc, char *argv[])
 
     free(bin);
 
-    run_elf_module(m, argv[2]);
+    // run_elf_module(m, argv[2]);
+    run_elf_module_by_entry_point(m, argc - 1, (const char**)(argv + 1), &start);
 
+    timespec_get(&finish, TIME_UTC);
+    printf("Elf loader finished execution");
+    print_difftime(&start, &finish);
     LOG_INFO("module %s run done", m->name);
 
     return 0;

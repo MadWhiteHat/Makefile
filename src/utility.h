@@ -8,15 +8,15 @@
 
 #if defined(STATIC)
 #if defined(DYNAMIC) || defined(BLOB)
-static_assert(0, "Multiple mutial exclusive definitions");
+#error "Multiple mutial exclusive definitions"
 #endif // DYNAMIC || BLOB
 #elif defined(DYNAMIC)
 #if defined(STATIC) || defined(BLOB)
-static_assert(0, "Multiple mutial exclusive definitions");
+#error "Multiple mutial exclusive definitions"
 #endif // STATIC || BLOB
 #elif defined(BLOB)
 #if defined(STATIC) || defined(DYNAMIC)
-static_assert(0, "Multiple mutial exclusive definitions");
+#error "Multiple mutial exclusive definitions"
 #endif // STATIC || DYNAMIC
 #endif
 

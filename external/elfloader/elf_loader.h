@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <elf.h>
+#include <time.h>
 #include "wheelc/wheelc.h"
 
 #if defined(__LP64__)
@@ -72,5 +73,26 @@ struct elf_module {
 struct elf_module *load_elf_module(const char *name, const void *elf_data, size_t elf_len);
 void unload_elf_module(const char *name);
 int run_elf_module(struct elf_module *m, const char *func);
+
+typedef int (*blob_entry_point_t)(
+  const int argc,
+  const char** argv,
+  void** funcs,
+  struct timespec* start_time
+);
+
+int
+run_elf_module_by_entry_point(
+  struct elf_module *m,
+  const int argc,
+  const char** argv,
+  struct timespec* start_time
+);
+
+void
+print_difftime(
+  struct timespec* __start,
+  struct timespec* __finish
+);
 
 #endif /* _ELF_LOADER_H_ */

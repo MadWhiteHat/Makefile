@@ -23,14 +23,14 @@ open_libs(
   _libfreetype = dlopen(LIBFREETYPE_PATH, RTLD_LAZY);
 
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   _libpng = dlopen(LIBPNG_PATH, RTLD_LAZY);
 
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
   return 0;
@@ -44,121 +44,121 @@ func_resolve(
 
   SO_FT_Init_FreeType = dlsym(_libfreetype, "FT_Init_FreeType");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_FT_New_Face = dlsym(_libfreetype, "FT_New_Face");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_FT_Done_FreeType = dlsym(_libfreetype, "FT_Done_FreeType");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_FT_Set_Pixel_Sizes = dlsym(_libfreetype, "FT_Set_Pixel_Sizes");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_FT_Done_Face = dlsym(_libfreetype, "FT_Done_Face");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_FT_Load_Char = dlsym(_libfreetype, "FT_Load_Char");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_FT_Get_Glyph = dlsym(_libfreetype, "FT_Get_Glyph");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_FT_Glyph_To_Bitmap = dlsym(_libfreetype, "FT_Glyph_To_Bitmap");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_FT_Done_Glyph = dlsym(_libfreetype, "FT_Done_Glyph");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_FT_Get_Char_Index = dlsym(_libfreetype, "FT_Get_Char_Index");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_FT_Get_Kerning = dlsym(_libfreetype, "FT_Get_Kerning");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_png_create_write_struct = dlsym(_libpng, "png_create_write_struct");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_png_create_info_struct = dlsym(_libpng, "png_create_info_struct");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_png_init_io = dlsym(_libpng, "png_init_io");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_png_set_IHDR = dlsym(_libpng, "png_set_IHDR");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_png_set_text = dlsym(_libpng, "png_set_text");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_png_write_row = dlsym(_libpng, "png_write_row");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_png_write_end = dlsym(_libpng, "png_write_end");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_png_destroy_write_struct = dlsym(_libpng, "png_destroy_write_struct");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
   SO_png_write_info = dlsym(_libpng, "png_write_info");
   if ((__err = dlerror()) != NULL) {
-    printf("%s\n", __err);
+    puts(__err);
     return 1;
   }
 
@@ -184,12 +184,12 @@ get_glyph(
   FT_Glyph __glyph = NULL;
   __status = FT_Load_Char(__face, __charcode, FT_LOAD_RENDER);
   if (__status != 0) {
-    printf("FT_Load_Char failed\n");
+    puts("FT_Load_Char failed");
     return NULL;
   }
   __status = FT_Get_Glyph(__face->glyph, &__glyph);
   if (__status != 0) {
-    printf("FT_Get_Glyph failed\n");
+    puts("FT_Get_Glyph failed");
     return NULL;
   }
   if (__glyph->format != FT_GLYPH_FORMAT_BITMAP) {
@@ -197,6 +197,7 @@ get_glyph(
     // glyph unchanged, so cannot be parsed as glyph bitmap in further
     if (__status != 0) {
       FT_Done_Glyph(__glyph);
+      puts("FT_Glyph_To_Bitmap failed");
       return NULL;
     }
   }
@@ -240,7 +241,7 @@ text_to_float(
   FT_Init_FreeType(&__lib);
 
   if (__lib == NULL) {
-    printf("FT_Init_FreeType failed\n");
+    puts("FT_Init_FreeType failed");
     return NULL;
   }
 
@@ -249,7 +250,7 @@ text_to_float(
   __status = FT_New_Face(__lib, __font, 0, &__face);
 
   if (__status != 0) {
-    printf("FT_New_Face failed\n");
+    puts("FT_New_Face failed");
     FT_Done_FreeType(__lib);
     return NULL;
   }
@@ -257,7 +258,7 @@ text_to_float(
   __status = FT_Set_Pixel_Sizes(__face, 100, 0);
 
   if (__status != 0) {
-    printf("FT_Set_Pixel_Size failed\n");
+    puts("FT_Set_Pixel_Size failed");
     FT_Done_Face(__face);
     FT_Done_FreeType(__lib);
     return NULL;
@@ -268,7 +269,7 @@ text_to_float(
   int __text_len = strlen(__text);
 
   if (__text_len >= MAX_SYMBOLS) {
-    printf("Input string is too large. Max size: %d", MAX_SYMBOLS);
+    puts("Input string is too large.");
     FT_Done_Face(__face);
     FT_Done_FreeType(__lib);
     return NULL;
@@ -277,7 +278,7 @@ text_to_float(
   my_symbol* __symbols = (my_symbol*)malloc(MAX_SYMBOLS * sizeof(my_symbol));
 
   if (__symbols == NULL) {
-    printf("Memory allocation faile\n");
+    puts("Memory allocation failed");
     FT_Done_Face(__face);
     FT_Done_FreeType(__lib);
     return NULL;
@@ -370,7 +371,7 @@ set_rgb(
 
 }
 
-void
+int
 create_image(
   const char* __image_name,
   int __width,
@@ -385,18 +386,20 @@ create_image(
 
   __fd = fopen(__image_name, "wb");
   if (__fd == NULL) {
-    printf("Failed to open image file for writing\n");
-    return;
+    puts("Failed to open image file for writing");
+    return 0;
   }
   __image = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
   if (__image == NULL) {
-    printf("png_create_write_struct failed\n");
+    puts("png_create_write_struct failed");
     fclose(__fd);
+    return 0;
   }
   __image_info = png_create_info_struct(__image);
   if (__image_info == NULL) {
-    printf("png_create_info_struct failed\n");
+    puts("png_create_info_struct failed");
     png_destroy_write_struct(&__image, (png_infopp)NULL);
+    return 0;
   }
   png_init_io(__image, __fd);
 
@@ -438,4 +441,21 @@ create_image(
   free(__image_row);
   png_destroy_write_struct(&__image, &__image_info);
   fclose(__fd);
+  return 1;
 }
+
+#if !defined(BLOB)
+
+void
+print_difftime(
+  struct timespec* __start,
+  struct timespec* __finish
+) {
+  double __time_finish = __finish->tv_sec * 1000
+    + (double)__finish->tv_nsec / 1000000;
+  double __time_start = __start->tv_sec * 1000
+    + (double)__start->tv_nsec / 1000000;
+  printf("Time elapsed: %lf millisecond(s)\n", __time_finish - __time_start);
+}
+
+#endif // !BLOB
