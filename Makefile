@@ -1,4 +1,4 @@
-CC=gcc
+CC=cc
 CC_FLAGS=-Wall -Wextra -g
 
 ROOT_MAKEFILE_DIR = ${abspath ./}
@@ -33,10 +33,11 @@ FREETYPE_SHARED_LIBRARY=${FREETYPE_BINARY_DIR}/libfreetype.so
 ELFLOADER_NAME=elfloader
 ELFLOADER_SOURCE_DIR=${PROJECT_EXTERNAL_DIR}/${ELFLOADER_NAME}
 ELFLOADER_BINARY_DIR=${PROJECT_BUILD_DIR}/${ELFLOADER_NAME}
+ELFLOADER_EXECUTABLE_NAME=${ELFLOADER_NAME}.out
 
 CC_STATIC_FLAGS=-static -Werror
 CC_DYNAMIC_FLAGS=-Werror -Wl,-rpath=${ZLIB_BINARY_DIR}
-CC_BLOB_FLAGS=-fno-stack-protector -fno-exceptions -nostdlib -pie -fPIE -fPIC
+CC_BLOB_FLAGS=-fno-stack-protector -fno-exceptions -nostdlib -pie -fPIE -fPIC -mno-sse4.2
 
 --zlib ${ZLIB_SOURCE_DIR}:
 	@echo "Building zlib..."
@@ -77,16 +78,18 @@ CC_BLOB_FLAGS=-fno-stack-protector -fno-exceptions -nostdlib -pie -fPIE -fPIC
 	-DFT_DISABLE_HARFBUZZ=ON \
 	-DFT_DISABLE_BROTLI=ON \
 	-DFT_DISABLE_BZIP2=ON \
-	-S ${FREETYPE_SOURCE_DIR} -B ${FREETYPE_BINARY_DIR}
-	@${MAKE} -C ${FREETYPE_BINARY_DIR} ${FREETYPE_TARGET}
+	-S ${FREETYPE_SOURCE_DIR} -B ${FREETYPE_BINARY_DIR} 1> /dev/null
+	@${MAKE} -C ${FREETYPE_BINARY_DIR} ${FREETYPE_TARGET} 1> /dev/null
 	@echo "Done!"
 
 --elf_loader: ${ELFLOADER_SOURCE_DIR}/Makefile
 	@echo "Building elf loader..."
 	@${MAKE} -C ${ELFLOADER_SOURCE_DIR} all 1> /dev/null
 	@mkdir -p ${ELFLOADER_BINARY_DIR} 1> /dev/null
-	@mv ${ELFLOADER_SOURCE_DIR}/${ELFLOADER_NAME} ${ELFLOADER_BINARY_DIR}/
-	@ln -nsf ${ELFLOADER_BINARY_DIR}/${ELFLOADER_NAME} ${ELFLOADER_NAME}
+	@mv ${ELFLOADER_SOURCE_DIR}/${ELFLOADER_EXECUTABLE_NAME} \
+		${ELFLOADER_BINARY_DIR}/
+	@ln -nsf ${ELFLOADER_BINARY_DIR}/${ELFLOADER_EXECUTABLE_NAME} \
+		${ELFLOADER_EXECUTABLE_NAME}
 	@echo "Done!"
 
 git_update:
@@ -173,6 +176,6 @@ clean:
 	@echo "Cleaning up..."
 	@rm -rf ${PROJECT_OUT_DIR}
 	@rm -f ${PROJECT_EXECUTABLE_NAME}
-	@rm -f ${ELFLOADER_NAME}
+	@rm -f ${ELFLOADER_EXECUTABLE_NAME}
 	@rm -f *.png
 	@echo "Done!"
