@@ -14,7 +14,6 @@ PROJECT_EXECUTABLE_NAME=${PROJECT_NAME}.out
 
 ZLIB_SOURCE_DIR=${PROJECT_EXTERNAL_DIR}/zlib
 ZLIB_BINARY_DIR=${PROJECT_BUILD_DIR}/zlib
-ZLIB_HEADERS_DIR=${ZLIB_SOURCE_DIR}
 ZLIB_STATIC_LIBRARY=${ZLIB_BINARY_DIR}/libz.a
 ZLIB_SHARED_LIBRARY=${ZLIB_BINARY_DIR}/libz.so
 
@@ -37,7 +36,7 @@ ELFLOADER_EXECUTABLE_NAME=${ELFLOADER_NAME}.out
 
 CC_STATIC_FLAGS=-static -Werror
 CC_DYNAMIC_FLAGS=-Werror -Wl,-rpath=${ZLIB_BINARY_DIR}
-CC_BLOB_FLAGS=-fno-stack-protector -fno-exceptions -nostdlib -pie -fPIE -fPIC -mno-sse4.2
+CC_BLOB_FLAGS=-fno-stack-protector -fno-exceptions -nostdlib -pie -fPIE -fPIC
 
 --zlib ${ZLIB_SOURCE_DIR}:
 	@echo "Building zlib..."
@@ -58,7 +57,7 @@ CC_BLOB_FLAGS=-fno-stack-protector -fno-exceptions -nostdlib -pie -fPIE -fPIC -m
 	-DPNG_EXECUTABLES=OFF \
 	-DPNG_TESTS=OFF \
 	-DPNG_BUILD_ZLIB=ON \
-	-DZLIB_INCLUDE_DIRS=${ZLIB_HEADERS_DIR} \
+	-DZLIB_INCLUDE_DIRS="${ZLIB_SOURCE_DIR};${ZLIB_BINARY_DIR}" \
 	-DPNG_STATIC=${LIBPNG_BUILD_STATIC} \
 	-DPNG_SHARED=${LIBPNG_BUILD_SHARED} \
 	-DM_LIBRARY= \
