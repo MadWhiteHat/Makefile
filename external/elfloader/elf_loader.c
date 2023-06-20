@@ -9,7 +9,6 @@
 #include <fcntl.h>
 #include <math.h>
 #include <setjmp.h>
-#include <stdarg.h>
 #include <sys/user.h>
 #include <sys/mman.h>
 #include <sys/auxv.h>
@@ -1037,7 +1036,7 @@ run_elf_module_by_entry_point(
   void* functions[100];
   functions[BLOB_PUTS] = puts;
   functions[BLOB_STRCMP] = strcmp;
-  functions[BLOB_STRLEN] = strcmp;
+  functions[BLOB_STRLEN] = strlen;
   functions[BLOB_FOPEN] = fopen;
   functions[BLOB_FCLOSE] = fclose;
   functions[BLOB_TIMESPEC_GET] = timespec_get;
@@ -1087,6 +1086,9 @@ run_elf_module_by_entry_point(
   functions[BLOB_PRINTF] = printf;
   functions[BLOB_SPRINTF] = sprintf;
   functions[BLOB_FPRINTF] = fprintf;
+  functions[BLOB_STPCPY] = stpcpy;
+  functions[BLOB_CALLOC] = calloc;
+  functions[BLOB_STRTOD] = strtod;
 
   return fn(argc, argv, functions, start);
 }

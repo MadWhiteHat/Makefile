@@ -247,6 +247,8 @@ text_to_float(
 
   *__width = 0;
   *__height = 0;
+
+  printf("width %p\nheight %p\nfont %p\ntext %p\n", (void*)__width, (void*)__height, (void*)__font, (void*)__text);
   __status = FT_New_Face(__lib, __font, 0, &__face);
 
   if (__status != 0) {
@@ -314,10 +316,18 @@ text_to_float(
     __bottom = MAX(__bottom, __sym->_pos_y + __sym->_height);
   }
 
+  if (__total_symbols == 0) {
+    puts("No symbols converted");
+    FT_Done_Face(__face);
+    FT_Done_FreeType(__lib);
+    return NULL;
+  }
+
   for (int i = 0; i < __total_symbols; ++i) { __symbols[i]._pos_x -= __left; }
 
   const my_symbol* __last_sym = &(__symbols[__total_symbols - 1]);
-  const int __image_width = __last_sym->_pos_x + __last_sym->_width + 2 * WIDTH_SHIFT;
+  const int __image_width = __last_sym->_pos_x + __last_sym->_width + 2
+    * WIDTH_SHIFT;
   const int __image_height = __bottom - __top + 2 * HEIGHT_SHIFT;
   __img = (float*)malloc(__image_width * __image_height * sizeof(float));
   memset(__img, 0x00, __image_width * __image_height * sizeof(float));

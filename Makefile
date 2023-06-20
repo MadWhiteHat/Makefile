@@ -1,7 +1,7 @@
-CC=cc
-CC_FLAGS=-Wall -Wextra -g
+CC=gcc
+CC_FLAGS=-Wall -Wextra -Ofast
 
-ROOT_MAKEFILE_DIR = ${abspath ./}
+ROOT_MAKEFILE_DIR=${abspath ./}
 PROJECT_NAME=text2png
 PROJECT_SOURCE_DIR=${ROOT_MAKEFILE_DIR}/src
 PROJECT_OUT_DIR=${ROOT_MAKEFILE_DIR}/out
@@ -41,18 +41,18 @@ CC_BLOB_FLAGS=-fno-stack-protector -fno-exceptions -nostdlib -pie -fPIE -fPIC
 --zlib ${ZLIB_SOURCE_DIR}:
 	@echo "Building zlib..."
 	@mkdir -p ${ZLIB_BINARY_DIR}
-	@cmake \
+	cmake \
 	-DCMAKE_C_FLAGS=${ZLIB_FLAGS} \
 	-Wno-deprecated \
-	-S ${ZLIB_SOURCE_DIR} -B ${ZLIB_BINARY_DIR} 1> /dev/null
-	@${MAKE} -C ${ZLIB_BINARY_DIR} ${ZLIB_TARGET} 1> /dev/null
+	-S ${ZLIB_SOURCE_DIR} -B ${ZLIB_BINARY_DIR}
+	${MAKE} -C ${ZLIB_BINARY_DIR} ${ZLIB_TARGET}
 	@echo "Done!"
 
 
 --libpng: --zlib ${LIBPNG_SOURCE_DIR}
 	@echo "Building libpng..."
 	@mkdir -p ${LIBPNG_BINARY_DIR}
-	@cmake \
+	cmake \
 	-DCMAKE_C_FLAGS=${LIBPNG_FLAGS} \
 	-DPNG_EXECUTABLES=OFF \
 	-DPNG_TESTS=OFF \
@@ -62,14 +62,14 @@ CC_BLOB_FLAGS=-fno-stack-protector -fno-exceptions -nostdlib -pie -fPIE -fPIC
 	-DPNG_SHARED=${LIBPNG_BUILD_SHARED} \
 	-DM_LIBRARY= \
 	-Wno-deprecated \
-	-S ${LIBPNG_SOURCE_DIR} -B ${LIBPNG_BINARY_DIR} 1> /dev/null
-	@${MAKE} -C ${LIBPNG_BINARY_DIR} ${PNG_TARGET} 1> /dev/null
+	-S ${LIBPNG_SOURCE_DIR} -B ${LIBPNG_BINARY_DIR}
+	${MAKE} -C ${LIBPNG_BINARY_DIR} ${PNG_TARGET}
 	@echo "Done!"
 
 --freetype: ${FREETYPE_SOURCE_DIR}
 	@echo "Building freetype..."
 	@mkdir -p ${FREETYPE_BINARY_DIR}
-	@cmake \
+	cmake \
 	-DCMAKE_C_FLAGS=${FREETYPE_FLAGS} \
 	-DBUILD_SHARED_LIBS=${FREETYPE_BUILD_SHARED_LIBS} \
 	-DFT_DISABLE_ZLIB=ON \
@@ -77,8 +77,8 @@ CC_BLOB_FLAGS=-fno-stack-protector -fno-exceptions -nostdlib -pie -fPIE -fPIC
 	-DFT_DISABLE_HARFBUZZ=ON \
 	-DFT_DISABLE_BROTLI=ON \
 	-DFT_DISABLE_BZIP2=ON \
-	-S ${FREETYPE_SOURCE_DIR} -B ${FREETYPE_BINARY_DIR} 1> /dev/null
-	@${MAKE} -C ${FREETYPE_BINARY_DIR} ${FREETYPE_TARGET} 1> /dev/null
+	-S ${FREETYPE_SOURCE_DIR} -B ${FREETYPE_BINARY_DIR}
+	${MAKE} -C ${FREETYPE_BINARY_DIR} ${FREETYPE_TARGET}
 	@echo "Done!"
 
 --elf_loader: ${ELFLOADER_SOURCE_DIR}/Makefile
@@ -100,20 +100,20 @@ git_update:
 --libs: --zlib --libpng --freetype
 
 static: ZLIB_TARGET=zlibstatic
-static: ZLIB_FLAGS=
+static: ZLIB_FLAGS="${CC_FLAGS}"
 static: LIBPNG_BUILD_STATIC=ON
 static: LIBPNG_BUILD_SHARED=OFF
 static: LIBPNG_TARGET=png_static
-static: LIBPNG_FLAGS=
+static: LIBPNG_FLAGS="${CC_FLAGS}"
 static: FREETYPE_BUILD_SHARED_LIBS=OFF
 static: FREETYPE_TARGET=freetype
-static: FREETYPE_FLAGS=
+static: FREETYPE_FLAGS="${CC_FLAGS}"
 static: PROJECT_LINKAGE_TYPE=STATIC
 static: --libs \
 	${PROJECT_HEADERS} ${PROJECT_SOURCES}
 	@echo "Building project with static linkage..."
 	@mkdir -p ${PROJECT_BINARY_DIR}
-	@${CC} ${CC_FLAGS} ${CC_STATIC_FLAGS} -D${PROJECT_LINKAGE_TYPE} \
+	${CC} ${CC_FLAGS} ${CC_STATIC_FLAGS} -D${PROJECT_LINKAGE_TYPE} \
 		${PROJECT_SOURCES} \
 		-I${LIBPNG_HEADERS_DIR} -I${FREETYPE_HEADERS_DIR} \
 		${FREETYPE_STATIC_LIBRARY} ${LIBPNG_STATIC_LIBRARY} \
@@ -124,14 +124,14 @@ static: --libs \
 	@echo "Done!"
 
 dynamic: ZLIB_TARGET=zlib
-dynamic: ZLIB_FLAGS=
+dynamic: ZLIB_FLAGS="${CC_FLAGS}"
 dynamic: LIBPNG_BUILD_STATIC=OFF
 dynamic: LIBPNG_BUILD_SHARED=ON
 dynamic: LIBPNG_TARGET=png_shared
-dynamic: LIBPNG_FLAGS=
+dynamic: LIBPNG_FLAGS="${CC_FLAGS}"
 dynamic: FREETYPE_BUILD_SHARED_LIBS=ON
 dynamic: FREETYPE_TARGET=freetype
-dynamic: FREETYPE_FLAGS=
+dynamic: FREETYPE_FLAGS="${CC_FLAGS}"
 dynamic: PROJECT_LINKAGE_TYPE=DYNAMIC
 dynamic: --libs \
 	${PROJECT_HEADERS} ${PROJECT_SOURCES}
@@ -149,23 +149,24 @@ dynamic: --libs \
 	@echo "Done!"
 
 blob: ZLIB_TARGET=zlibstatic
-blob: ZLIB_FLAGS="${CC_BLOB_FLAGS}"
+blob: ZLIB_FLAGS="${CC_FLAGS} ${CC_BLOB_FLAGS}"
 blob: LIBPNG_BUILD_STATIC=ON
 blob: LIBPNG_BUILD_SHARED=OFF
 blob: LIBPNG_TARGET=png_static
-blob: LIBPNG_FLAGS="${CC_BLOB_FLAGS}"
+blob: LIBPNG_FLAGS="${CC_FLAGS} ${CC_BLOB_FLAGS}"
 blob: FREETYPE_BUILD_SHARED_LIBS=OFF
 blob: FREETYPE_TARGET=freetype
-blob: FREETYPE_FLAGS="${CC_BLOB_FLAGS}"
+blob: FREETYPE_FLAGS="${CC_FLAGS} ${CC_BLOB_FLAGS}"
 blob: PROJECT_LINKAGE_TYPE=BLOB
 blob: --libs --elf_loader
 	@echo "Building project with elfloader..."
 	@mkdir -p ${PROJECT_BINARY_DIR}
-	@${CC} ${CC_FLAGS} ${CC_BLOB_FLAGS} -e blob_entry	-D${PROJECT_LINKAGE_TYPE} \
+	${CC} \
 		${PROJECT_SOURCES} \
 		-I${ELFLOADER_SOURCE_DIR} -I${LIBPNG_HEADERS_DIR} -I${FREETYPE_HEADERS_DIR} \
 		${FREETYPE_STATIC_LIBRARY} ${LIBPNG_STATIC_LIBRARY} \
 		${ZLIB_STATIC_LIBRARY} \
+		${CC_FLAGS} ${CC_BLOB_FLAGS} -e blob_entry -D${PROJECT_LINKAGE_TYPE} \
 		-o ${PROJECT_BINARY_DIR}/${PROJECT_EXECUTABLE_NAME}
 	@ln -nsf ${PROJECT_BINARY_DIR}/${PROJECT_EXECUTABLE_NAME} \
 		${PROJECT_EXECUTABLE_NAME}

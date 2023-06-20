@@ -18,6 +18,7 @@
 FILE* stderr;
 void** global_funcs;
 
+
 int puts(const char* __str) {
   typedef int (*puts_type)(const char*);
   return ((puts_type)global_funcs[BLOB_PUTS])(__str);
@@ -259,7 +260,7 @@ int fputc(int __ch, FILE* __stream) {
 }
 
 _Noreturn void abort(void) {
-  typedef void (*abort_type)(void);
+  typedef _Noreturn void (*abort_type)(void);
   ((abort_type)global_funcs[BLOB_ABORT])();
 }
 
@@ -295,7 +296,7 @@ int _setjmp(struct __jmp_buf_tag __env[1]) {
 }
 
 _Noreturn void longjmp(struct __jmp_buf_tag __env[1], int __status) {
-  typedef void (*longjmp_type)(struct __jmp_buf_tag[1], int);
+  typedef _Noreturn void (*longjmp_type)(struct __jmp_buf_tag[1], int);
   ((longjmp_type)global_funcs[BLOB_LONGJMP])(__env, __status);
 }
 
@@ -337,6 +338,21 @@ int fprintf(FILE* __stream, const char* __fmt, ...) {
   __res = ((fprintf_type)global_funcs[BLOB_FPRINTF])(__stream, __fmt, __args);
   va_end(__args);
   return __res;
+}
+
+char* stpcpy(char* restrict __dest, const char* restrict __src) {
+  typedef char* (*stpcpy_type)(char*, const char*);
+  return ((stpcpy_type)global_funcs[BLOB_STPCPY])(__dest, __src);
+}
+
+void* calloc(size_t __num, size_t __size) {
+  typedef void* (*calloc_type)(size_t, size_t);
+  return ((calloc_type)global_funcs[BLOB_CALLOC])(__num, __size);
+}
+
+double strtod(const char* restrict __str, char** restrict __str_end) {
+  typedef double (*strtod_type)(const char* restrict, char** restrict);
+  return ((strtod_type)global_funcs[BLOB_STRTOD])(__str, __str_end);
 }
 
 #endif // BLOB
@@ -458,6 +474,7 @@ int main(const int argc, const char** argv) {
 
   int __width = 0;
   int __height = 0;
+  printf("width %p\nheight %p\nfont %p\ntext %p\n", (void*)&__width, (void*)&__height, (void*)__font, (void*)__text);
 
   float* __buff = text_to_float(&__width, &__height, __font, __text);
 
