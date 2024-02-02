@@ -248,7 +248,6 @@ text_to_float(
   *__width = 0;
   *__height = 0;
 
-  printf("width %p\nheight %p\nfont %p\ntext %p\n", (void*)__width, (void*)__height, (void*)__font, (void*)__text);
   __status = FT_New_Face(__lib, __font, 0, &__face);
 
   if (__status != 0) {

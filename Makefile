@@ -42,7 +42,8 @@ CC_BLOB_FLAGS=-fno-stack-protector -fno-exceptions -nostdlib -pie -fPIE -fPIC
 	@echo "Building zlib..."
 	@mkdir -p ${ZLIB_BINARY_DIR}
 	cmake \
-	-DCMAKE_C_FLAGS=${ZLIB_FLAGS} \
+	-DZLIB_BUILD_EXAMPLES=OFF \
+	-DCMAKE_C_FLAGS_INIT=${ZLIB_FLAGS} \
 	-Wno-deprecated \
 	-S ${ZLIB_SOURCE_DIR} -B ${ZLIB_BINARY_DIR}
 	${MAKE} -C ${ZLIB_BINARY_DIR} ${ZLIB_TARGET}
@@ -53,13 +54,13 @@ CC_BLOB_FLAGS=-fno-stack-protector -fno-exceptions -nostdlib -pie -fPIE -fPIC
 	@echo "Building libpng..."
 	@mkdir -p ${LIBPNG_BINARY_DIR}
 	cmake \
-	-DCMAKE_C_FLAGS=${LIBPNG_FLAGS} \
-	-DPNG_EXECUTABLES=OFF \
+	-DCMAKE_C_FLAGS_INIT=${LIBPNG_FLAGS} \
+	-DPNG_SHARED=${LIBPNG_BUILD_SHARED} \
+	-DPNG_STATIC=${LIBPNG_BUILD_STATIC} \
 	-DPNG_TESTS=OFF \
+	-DPNG_TOOLS=OFF \
 	-DPNG_BUILD_ZLIB=ON \
 	-DZLIB_INCLUDE_DIRS="${ZLIB_SOURCE_DIR};${ZLIB_BINARY_DIR}" \
-	-DPNG_STATIC=${LIBPNG_BUILD_STATIC} \
-	-DPNG_SHARED=${LIBPNG_BUILD_SHARED} \
 	-DM_LIBRARY= \
 	-Wno-deprecated \
 	-S ${LIBPNG_SOURCE_DIR} -B ${LIBPNG_BINARY_DIR}
@@ -70,7 +71,7 @@ CC_BLOB_FLAGS=-fno-stack-protector -fno-exceptions -nostdlib -pie -fPIE -fPIC
 	@echo "Building freetype..."
 	@mkdir -p ${FREETYPE_BINARY_DIR}
 	cmake \
-	-DCMAKE_C_FLAGS=${FREETYPE_FLAGS} \
+	-DCMAKE_C_FLAGS_INIT=${FREETYPE_FLAGS} \
 	-DBUILD_SHARED_LIBS=${FREETYPE_BUILD_SHARED_LIBS} \
 	-DFT_DISABLE_ZLIB=ON \
 	-DFT_DISABLE_PNG=ON \

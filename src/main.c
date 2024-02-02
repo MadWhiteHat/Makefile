@@ -474,7 +474,6 @@ int main(const int argc, const char** argv) {
 
   int __width = 0;
   int __height = 0;
-  printf("width %p\nheight %p\nfont %p\ntext %p\n", (void*)&__width, (void*)&__height, (void*)__font, (void*)__text);
 
   float* __buff = text_to_float(&__width, &__height, __font, __text);
 
