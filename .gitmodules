@@ -1,9 +1,0 @@
-[submodule "external/libpng"]
-	path = external/libpng
-	url = https://github.com/glennrp/libpng.git
-[submodule "external/freetype"]
-	path = external/freetype
-	url = https://github.com/freetype/freetype.git
-[submodule "external/zlib"]
-	path = external/zlib
-	url = https://github.com/madler/zlib.git
