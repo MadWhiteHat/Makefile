@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     }
 
     timespec_get(&finish, TIME_UTC);
-    printf("Elf loader started execution");
+    puts("Elf loader started execution");
     print_difftime(&start, &finish);
 
     m = load_elf_module(bname, bin, len);
@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
     run_elf_module_by_entry_point(m, argc - 1, (const char**)(argv + 1), &start);
 
     timespec_get(&finish, TIME_UTC);
-    printf("Elf loader finished execution");
+    puts("Elf loader finished execution");
     print_difftime(&start, &finish);
 
     return 0;
