@@ -1,5 +1,5 @@
 all:
-	gcc -Wall -g -o elfloader.out elf_loader.c main.c wheelc/list.c -ldl \
+	gcc -DNDEBUG -Wall -g -o elfloader.out elf_loader.c main.c wheelc/list.c -ldl \
 		-lpthread -lm
 
 clean:

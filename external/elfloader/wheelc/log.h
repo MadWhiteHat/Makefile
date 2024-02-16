@@ -9,8 +9,12 @@ static inline const char *filename_from_path(const char *path)
     return (bname != NULL) ? bname + 1 : path;
 }
 
+#ifndef NDEBUG
 #define LOG_DEBUG(fmt, ...) \
     printf("[DEBUG %s:%d] " fmt "\n", filename_from_path(__FILE__), __LINE__, ## __VA_ARGS__)
+#else
+#define LOG_DEBUG(fmt, ...) ;
+#endif
 
 #define LOG_INFO(fmt, ...) \
     printf("[INFO  %s:%d] " fmt "\n", filename_from_path(__FILE__), __LINE__, ## __VA_ARGS__)
